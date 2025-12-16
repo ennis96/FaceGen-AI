@@ -10,13 +10,22 @@ import {
   X,
   LayoutGrid,
   Zap,
-  CheckCircle,
-  Loader2,
-  Share2,
-  Crown,
-  Check,
-  AlertCircle,
-  Info
+  CheckCircle, 
+  Loader2, 
+  Share2, 
+  Crown, 
+  Check, 
+  AlertCircle, 
+  Info, 
+  Lock, 
+  Wand2, 
+  Star,
+  Dice5,
+  Clock,
+  Layers,
+  FileCode,
+  Save,
+  Calendar
 } from 'lucide-react';
 
 export { 
@@ -36,5 +45,14 @@ export {
   Crown,
   Check,
   AlertCircle,
-  Info
+  Info,
+  Lock,
+  Wand2,
+  Star,
+  Dice5,
+  Clock,
+  Layers,
+  FileCode,
+  Save,
+  Calendar
 };
