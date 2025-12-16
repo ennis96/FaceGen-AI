@@ -47,28 +47,40 @@ const PRESET_LIBRARY: GeneratedFace[] = [
   // --- NEW: RETRO COLLECTION (PREMIUM) ---
   { id: 'p_rtr_1', style: WatchStyle.RETRO, prompt: 'Synthwave Sunset', imageUrl: 'https://images.unsplash.com/photo-1534237710431-e2fc698436d0?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
 
+  // --- NEW: PIXEL ART COLLECTION (PREMIUM) ---
+  { id: 'p_pix_1', style: WatchStyle.PIXEL, prompt: 'Retro Arcade City', imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // --- NEW: SKETCH COLLECTION (PREMIUM) ---
+  { id: 'p_skh_1', style: WatchStyle.SKETCH, prompt: 'Architectural Blueprint', imageUrl: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // --- NEW: CARS COLLECTION EXPANSION (PREMIUM) ---
+  { id: 'p_car_2', style: WatchStyle.CARS, prompt: 'Vintage Dashboard', imageUrl: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // --- NEW: SPACE COLLECTION EXPANSION (PREMIUM) ---
+  { id: 'p_spa_2', style: WatchStyle.SPACE, prompt: 'Nebula Explosion', imageUrl: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
   // --- RELIGIOUS & CULTURAL COLLECTION (FIXED IMAGES) ---
   // ISLAM
   { id: 'rel_isl_1', style: WatchStyle.ISLAMIC, prompt: 'Golden Mosque Art', imageUrl: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   { id: 'rel_isl_2', style: WatchStyle.ISLAMIC, prompt: 'Blue Mosaic', imageUrl: 'https://images.unsplash.com/photo-1580251703666-4155fb2721f4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
   
-  // CHRISTIANITY
-  { id: 'rel_chr_1', style: WatchStyle.RELIGIOUS, prompt: 'Stained Glass', imageUrl: 'https://images.unsplash.com/photo-1548625361-12f7169f5b68?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // CHRISTIANITY (Fixed URL)
+  { id: 'rel_chr_1', style: WatchStyle.RELIGIOUS, prompt: 'Stained Glass', imageUrl: 'https://images.unsplash.com/photo-1490558774775-5d9859250005?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   
-  // HINDUISM
-  { id: 'rel_hin_1', style: WatchStyle.RELIGIOUS, prompt: 'Diwali Lamps', imageUrl: 'https://images.unsplash.com/photo-1510300643621-e85df64947f6?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // HINDUISM (Fixed URL)
+  { id: 'rel_hin_1', style: WatchStyle.RELIGIOUS, prompt: 'Diwali Lamps', imageUrl: 'https://images.unsplash.com/photo-1574092289417-7694f576e932?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   
-  // BUDDHISM
-  { id: 'rel_bud_1', style: WatchStyle.RELIGIOUS, prompt: 'Buddha Statue', imageUrl: 'https://images.unsplash.com/photo-1526391584852-71c19b885c35?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // BUDDHISM (Fixed URL)
+  { id: 'rel_bud_1', style: WatchStyle.RELIGIOUS, prompt: 'Buddha Statue', imageUrl: 'https://images.unsplash.com/photo-1563214532-628d05260275?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   
-  // JUDAISM
-  { id: 'rel_jud_1', style: WatchStyle.RELIGIOUS, prompt: 'Hanukkah Menorah', imageUrl: 'https://images.unsplash.com/photo-1543787720-3b7c4d5d4d3d?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // JUDAISM (Fixed URL)
+  { id: 'rel_jud_1', style: WatchStyle.RELIGIOUS, prompt: 'Hanukkah Menorah', imageUrl: 'https://images.unsplash.com/photo-1512404500918-0951a37651a1?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   
-  // SIKHISM
-  { id: 'rel_sik_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Temple', imageUrl: 'https://images.unsplash.com/photo-1570183180299-c5603b222340?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // SIKHISM (Fixed URL)
+  { id: 'rel_sik_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Temple', imageUrl: 'https://images.unsplash.com/photo-1566802616147-3dc682669e46?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   
-  // JAPANESE/SHINTO
-  { id: 'rel_shin_1', style: WatchStyle.RELIGIOUS, prompt: 'Torii Gate', imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d9b152c6d4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // JAPANESE/SHINTO (Fixed URL)
+  { id: 'rel_shin_1', style: WatchStyle.RELIGIOUS, prompt: 'Torii Gate', imageUrl: 'https://images.unsplash.com/photo-1509355609325-132d75f24f8d?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
 ];
 
 // --- Utilities ---
