@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { GeneratedFace, WatchStyle, FaceConfiguration, WatchHandStyle, ComplicationLayout } from "../types";
+import { GeneratedFace, WatchStyle, FaceConfiguration, WatchHandStyle, ComplicationLayout, DeviceDefinition, WatchShape, ComplicationSlots } from "../types";
 
 // Initialize Gemini API
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -109,27 +109,49 @@ export const suggestFaceConfig = async (prompt: string, style: WatchStyle): Prom
     if (json.complicationLayout?.includes('Activity')) layout = ComplicationLayout.ACTIVITY;
     if (json.complicationLayout?.includes('Full')) layout = ComplicationLayout.FULL;
 
+    const complications: ComplicationSlots = { top: 'none', bottom: 'none', left: 'none', right: 'none' };
+
+    if (layout === ComplicationLayout.MINIMAL) {
+        complications.bottom = 'date';
+    } else if (layout === ComplicationLayout.ACTIVITY) {
+        complications.bottom = 'steps';
+        complications.left = 'heartrate';
+        complications.right = 'date';
+    } else if (layout === ComplicationLayout.FULL) {
+        complications.top = 'weather';
+        complications.bottom = 'steps';
+        complications.left = 'heartrate';
+        complications.right = 'date';
+    }
+
     return {
         handStyle,
-        complicationLayout: layout,
+        complications,
         accentColor: json.accentColor || '#10b981'
     };
 
    } catch (error) {
      return {
         handStyle: WatchHandStyle.CLASSIC,
-        complicationLayout: ComplicationLayout.MINIMAL,
+        complications: { top: 'none', bottom: 'date', left: 'none', right: 'none' },
         accentColor: '#ffffff'
      };
    }
 }
 
-export const generateWatchFaceImage = async (prompt: string, style: WatchStyle): Promise<GeneratedFace> => {
+export const generateWatchFaceImage = async (prompt: string, style: WatchStyle, device: DeviceDefinition): Promise<GeneratedFace> => {
   const styleModifier = getStyleModifier(style);
-  const fullPrompt = `Design a circular smart watch face background. 
+  
+  // Dynamic instruction based on shape
+  const shapeInstruction = device.shape === WatchShape.RECTANGLE
+    ? "rectangular aspect ratio (4:5), rounded corners, full screen apple watch wallpaper"
+    : "perfectly circular aspect ratio (1:1), round smartwatch face";
+
+  const fullPrompt = `Design a premium smart watch face background. 
   Subject: ${prompt}. 
   Style: ${styleModifier}. 
-  Requirements: The image must be perfectly circular or suitable for a circular mask. High contrast. Center area should be relatively clear for clock hands or digital time. No text or numbers on the image itself unless decorative.`;
+  Format: ${shapeInstruction}.
+  Requirements: High contrast. Center area relatively clear for clock hands. No text or numbers on the image itself. High resolution.`;
 
   try {
     const response = await ai.models.generateContent({
@@ -141,6 +163,10 @@ export const generateWatchFaceImage = async (prompt: string, style: WatchStyle):
           },
         ],
       },
+      config: {
+         // Although Nano models ignore aspect ratio config mostly, we guide via prompt. 
+         // For Imagen (if upgraded later), we would set aspectRatio here.
+      }
     });
 
     // Check for safety blocks or other finish reasons before trying to parse
@@ -190,9 +216,10 @@ export const generateWatchFaceImage = async (prompt: string, style: WatchStyle):
       prompt,
       style,
       createdAt: Date.now(),
+      targetDevice: device,
       config: { // Default config
         handStyle: WatchHandStyle.CLASSIC,
-        complicationLayout: ComplicationLayout.MINIMAL,
+        complications: { top: 'none', bottom: 'date', left: 'none', right: 'none' },
         accentColor: '#ffffff'
       }
     };

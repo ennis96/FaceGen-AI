@@ -3,61 +3,76 @@ import {
   Watch, Sparkles, Download, Palette, Settings, 
   CreditCard, Menu, X, LayoutGrid, Zap, CheckCircle, 
   Loader2, Share2, Crown, AlertCircle, Lock, Wand2,
-  Dice5, Clock, Layers, FileCode, Save, Calendar
+  Dice5, Clock, Layers, FileCode, Save, Calendar, Star,
+  LogOut, User as UserIcon, Smartphone, Search,
+  ArrowRight, Check, Battery, Cloud, Heart, Footprints
 } from './components/Icons';
 import WatchPreview from './components/WatchPreview';
 import Store from './components/Store';
+import Auth from './components/Auth';
 import { generateWatchFaceImage, enhancePrompt, generateRandomPrompt, suggestFaceConfig, GenerationError } from './services/geminiService';
-import { WatchStyle, GeneratedFace, Platform, User, PricingPlan, WatchHandStyle, ComplicationLayout, FaceConfiguration } from './types';
+import { WatchStyle, GeneratedFace, Platform, User, PricingPlan, WatchHandStyle, ComplicationType, FaceConfiguration, SUPPORTED_DEVICES, DeviceDefinition, WatchShape } from './types';
 
 // --- Static Data: Preset Collections ---
 const PRESET_LIBRARY: GeneratedFace[] = [
-  // --- FREE STARTER COLLECTION (Every Niche Covered) ---
-  { id: 'f_min_1', style: WatchStyle.MINIMAL, prompt: 'Bauhaus Monochrome', imageUrl: 'https://images.unsplash.com/photo-1495856458515-0637185db551?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_lux_1', style: WatchStyle.LUXURY, prompt: 'Classic Silver Link', imageUrl: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_cyb_1', style: WatchStyle.CYBERPUNK, prompt: 'Neon Grid Lines', imageUrl: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_fit_1', style: WatchStyle.FITNESS, prompt: 'Redline Pulse', imageUrl: 'https://images.unsplash.com/photo-1557161176-b8029757697a?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_car_1', style: WatchStyle.CARS, prompt: 'Asphalt Texture', imageUrl: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_ani_1', style: WatchStyle.ANIME, prompt: 'Pastel Sky City', imageUrl: 'https://images.unsplash.com/photo-1519882170906-097a6a43a255?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_spa_1', style: WatchStyle.SPACE, prompt: 'Deep Blue Nebula', imageUrl: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_nat_1', style: WatchStyle.NATURE, prompt: 'Mountain Peak Fog', imageUrl: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_bus_1', style: WatchStyle.BUSINESS, prompt: 'Navy Executive', imageUrl: 'https://images.unsplash.com/photo-1434056838489-2930eb510854?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_spo_1', style: WatchStyle.SPORTS, prompt: 'Stadium Grass', imageUrl: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_isl_1', style: WatchStyle.ISLAMIC, prompt: 'Teal Geometric', imageUrl: 'https://images.unsplash.com/photo-1542031097-f50937c86576?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'f_cul_1', style: WatchStyle.CULTURAL, prompt: 'Traditional Pattern', imageUrl: 'https://images.unsplash.com/photo-1590059390239-2a13b4c4dfc8?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  // --- FREE STARTER COLLECTION ---
+  { id: 'f_min_1', style: WatchStyle.MINIMAL, prompt: 'Bauhaus White Clean', imageUrl: 'https://images.unsplash.com/photo-1495856458515-0637185db551?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_nat_1', style: WatchStyle.NATURE, prompt: 'Misty Pine Forest', imageUrl: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_car_1', style: WatchStyle.CARS, prompt: 'Speedometer Macro', imageUrl: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_fit_1', style: WatchStyle.FITNESS, prompt: 'Red Energy Abstract', imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_spa_1', style: WatchStyle.SPACE, prompt: 'Orbiting Planet', imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_ani_1', style: WatchStyle.ANIME, prompt: 'Cyber City Anime', imageUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_spo_1', style: WatchStyle.SPORTS, prompt: 'Stadium Lights', imageUrl: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_bus_1', style: WatchStyle.BUSINESS, prompt: 'Executive Leather', imageUrl: 'https://images.unsplash.com/photo-1491336477066-31156b5e4f35?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'f_cyb_1', style: WatchStyle.CYBERPUNK, prompt: 'Neon Grid Lines', imageUrl: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
 
-  // --- PREMIUM DESIGNER COLLECTION (Slick, Modern, High-End) ---
-  { id: 'p_lux_2', style: WatchStyle.LUXURY, prompt: 'Dark Ceramic Tourbillon', imageUrl: 'https://images.unsplash.com/photo-1619195325950-89196d4007f3?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_lux_3', style: WatchStyle.LUXURY, prompt: 'Rose Gold Mesh', imageUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_cyb_2', style: WatchStyle.CYBERPUNK, prompt: 'Glitch Data Stream', imageUrl: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_cyb_3', style: WatchStyle.CYBERPUNK, prompt: 'Circuit Board Macro', imageUrl: 'https://images.unsplash.com/photo-1592478411213-61535f944806?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_car_2', style: WatchStyle.CARS, prompt: 'Carbon Fiber Weave', imageUrl: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_car_3', style: WatchStyle.CARS, prompt: 'Red Supercar Vent', imageUrl: 'https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_nat_2', style: WatchStyle.NATURE, prompt: 'Volcanic Black Sand', imageUrl: 'https://images.unsplash.com/photo-1506543730435-f2c1d2c87983?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_nat_3', style: WatchStyle.NATURE, prompt: 'Tropical Leaf Macro', imageUrl: 'https://images.unsplash.com/photo-1502977249102-1bf2219f57e3?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_isl_2', style: WatchStyle.ISLAMIC, prompt: 'Golden Arabesque', imageUrl: 'https://images.unsplash.com/photo-1580251703666-4155fb2721f4?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'p_cul_2', style: WatchStyle.CULTURAL, prompt: 'Ottoman Mosaic Tile', imageUrl: 'https://images.unsplash.com/photo-1565157618999-523c14c5c290?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  // --- PREMIUM DESIGNER COLLECTION ---
+  { id: 'p_lux_1', style: WatchStyle.LUXURY, prompt: 'Gold Mechanism', imageUrl: 'https://images.unsplash.com/photo-1614726365723-49cfae96a6f6?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  { id: 'p_nat_1', style: WatchStyle.NATURE, prompt: 'Volcanic Texture', imageUrl: 'https://images.unsplash.com/photo-1506543730435-f2c1d2c87983?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
   
-  // --- SEASONAL COLLECTION (Expanded) ---
-  { id: 's_win_1', style: WatchStyle.SEASONAL, prompt: 'Frosty Winter Morning', imageUrl: 'https://images.unsplash.com/photo-1544274488-842245e3f435?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 's_aut_1', style: WatchStyle.SEASONAL, prompt: 'Golden Autumn Leaves', imageUrl: 'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 's_hal_1', style: WatchStyle.SEASONAL, prompt: 'Dark Pumpkin Texture', imageUrl: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 's_spr_1', style: WatchStyle.SEASONAL, prompt: 'Sakura Blossom', imageUrl: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1000&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  // --- RELIGIOUS & CULTURAL COLLECTION (GLOBAL) ---
+  // ISLAM
+  { id: 'rel_isl_1', style: WatchStyle.ISLAMIC, prompt: 'Golden Mosque Dome', imageUrl: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'rel_isl_2', style: WatchStyle.ISLAMIC, prompt: 'Ramadan Lanterns', imageUrl: 'https://images.unsplash.com/photo-1587573088697-b4480442355e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  { id: 'rel_isl_3', style: WatchStyle.ISLAMIC, prompt: 'Blue Tile Patterns', imageUrl: 'https://images.unsplash.com/photo-1580251703666-4155fb2721f4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // CHRISTIANITY
+  { id: 'rel_chr_1', style: WatchStyle.RELIGIOUS, prompt: 'Stained Glass Art', imageUrl: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'rel_chr_2', style: WatchStyle.RELIGIOUS, prompt: 'Christmas Candles', imageUrl: 'https://images.unsplash.com/photo-1513297887119-d46091b24bfa?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  
+  // HINDUISM
+  { id: 'rel_hin_1', style: WatchStyle.RELIGIOUS, prompt: 'Diwali Lamps (Diyas)', imageUrl: 'https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'rel_hin_2', style: WatchStyle.RELIGIOUS, prompt: 'Holi Colors Abstract', imageUrl: 'https://images.unsplash.com/photo-1550948329-1393845bb084?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  { id: 'rel_hin_3', style: WatchStyle.RELIGIOUS, prompt: 'Ganesh Statue Gold', imageUrl: 'https://images.unsplash.com/photo-1567591414240-e791e8e2e22c?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // BUDDHISM
+  { id: 'rel_bud_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Buddha Statue', imageUrl: 'https://images.unsplash.com/photo-1596720614569-826d9c6e5a62?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+  { id: 'rel_bud_2', style: WatchStyle.RELIGIOUS, prompt: 'Lotus Flower Pond', imageUrl: 'https://images.unsplash.com/photo-1584305813353-8d6e91fc8976?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+
+  // JUDAISM
+  { id: 'rel_jud_1', style: WatchStyle.RELIGIOUS, prompt: 'Hanukkah Menorah', imageUrl: 'https://images.unsplash.com/photo-1543787720-3b7c4d5d4d3d?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
+
+  // SIKHISM
+  { id: 'rel_sik_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Temple Light', imageUrl: 'https://images.unsplash.com/photo-1570183180299-c5603b222340?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  
+  // JAPANESE/SHINTO
+  { id: 'rel_shin_1', style: WatchStyle.RELIGIOUS, prompt: 'Red Torii Gate', imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d9b152c6d4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
 ];
 
 // --- Utilities ---
 const getWeeklyDropFaces = () => {
-    // Determine current week number to rotate drops
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
     const diff = now.getTime() - start.getTime();
     const oneWeek = 1000 * 60 * 60 * 24 * 7;
     const weekNumber = Math.floor(diff / oneWeek);
-    
-    // Select faces based on modulo of week number to cycle through library
-    const premiumFaces = PRESET_LIBRARY.filter(f => f.isPremium);
+    const premiumFaces = PRESET_LIBRARY.filter(f => f.isPremium && f.style !== WatchStyle.SEASONAL);
     const startIndex = (weekNumber * 3) % premiumFaces.length;
-    return premiumFaces.slice(startIndex, startIndex + 3);
+    const drops = [];
+    for(let i=0; i<3; i++) {
+        drops.push(premiumFaces[(startIndex + i) % premiumFaces.length]);
+    }
+    return drops;
 };
 
 // --- Header ---
@@ -65,8 +80,9 @@ const Header: React.FC<{
   user: User; 
   onNavigate: (page: string) => void;
   onOpenStore: () => void;
+  onLogout: () => void;
   currentPage: string;
-}> = ({ user, onNavigate, onOpenStore, currentPage }) => {
+}> = ({ user, onNavigate, onOpenStore, onLogout, currentPage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -79,10 +95,10 @@ const Header: React.FC<{
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div 
-          className="flex items-center gap-2 cursor-pointer" 
+          className="flex items-center gap-2 cursor-pointer group" 
           onClick={() => onNavigate('explore')}
         >
-          <div className="bg-gradient-to-br from-primary to-blue-600 p-2 rounded-lg">
+          <div className="bg-gradient-to-br from-primary to-blue-600 p-2 rounded-lg group-hover:shadow-lg group-hover:shadow-primary/20 transition-all">
             <Watch className="text-white" size={20} />
           </div>
           <span className="font-bold text-xl tracking-tight hidden sm:block">FaceGen AI</span>
@@ -117,11 +133,17 @@ const Header: React.FC<{
               <Zap size={14} className="text-amber-400 group-hover:fill-amber-400" />
             )}
             <span className="text-xs font-bold text-white">{user.isPro ? 'PRO' : user.credits}</span>
-            {!user.isPro && <span className="text-xs text-neutral-500">credits</span>}
-            <span className="ml-2 text-xs text-primary hover:underline font-medium">
-              {user.isPro ? 'Manage' : 'Top up'}
-            </span>
           </button>
+          
+          <div className="hidden sm:flex items-center gap-2 border-l border-white/10 pl-4">
+            <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-400">
+               {user.name.charAt(0)}
+            </div>
+            <button onClick={onLogout} className="text-neutral-500 hover:text-white transition-colors">
+               <LogOut size={18} />
+            </button>
+          </div>
+
           <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
@@ -158,6 +180,13 @@ const Header: React.FC<{
              <Zap size={18} />
              Store & Credits
           </button>
+          <button 
+             onClick={onLogout}
+             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-400 hover:bg-white/5"
+          >
+             <LogOut size={18} />
+             Log Out
+          </button>
         </div>
       )}
     </header>
@@ -167,25 +196,33 @@ const Header: React.FC<{
 // --- Creator View ---
 const CreateView: React.FC<{ 
   user: User; 
-  onGenerate: (prompt: string, style: WatchStyle) => Promise<GeneratedFace | null>;
+  onGenerate: (prompt: string, style: WatchStyle, device: DeviceDefinition) => Promise<GeneratedFace | null>;
   onSave: (face: GeneratedFace, config: FaceConfiguration) => void;
-  platform: Platform;
-  setPlatform: (p: Platform) => void;
+  selectedDevice: DeviceDefinition;
+  setSelectedDevice: (d: DeviceDefinition) => void;
   onOpenStore: () => void;
   initialFace: GeneratedFace | null;
-}> = ({ user, onGenerate, onSave, platform, setPlatform, onOpenStore, initialFace }) => {
+}> = ({ user, onGenerate, onSave, selectedDevice, setSelectedDevice, onOpenStore, initialFace }) => {
   const [prompt, setPrompt] = useState(initialFace?.prompt || '');
   const [selectedStyle, setSelectedStyle] = useState<WatchStyle>(initialFace?.style || WatchStyle.MINIMAL);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
-  const [isConfiguring, setIsConfiguring] = useState(false); // AI Config state
+  const [isConfiguring, setIsConfiguring] = useState(false); 
   const [currentResult, setCurrentResult] = useState<GeneratedFace | null>(initialFace);
   const [error, setError] = useState<{title: string, message: string} | null>(null);
+  const [deviceSearch, setDeviceSearch] = useState('');
+  const [showDeviceDropdown, setShowDeviceDropdown] = useState(false);
+
+  // Filter devices logic
+  const filteredDevices = SUPPORTED_DEVICES.filter(d => 
+     d.name.toLowerCase().includes(deviceSearch.toLowerCase()) || 
+     d.brand.toLowerCase().includes(deviceSearch.toLowerCase())
+  );
 
   // Customization State
   const [config, setConfig] = useState<FaceConfiguration>({
     handStyle: initialFace?.config?.handStyle || WatchHandStyle.CLASSIC,
-    complicationLayout: initialFace?.config?.complicationLayout || ComplicationLayout.MINIMAL,
+    complications: initialFace?.config?.complications || { top: 'none', bottom: 'none', left: 'none', right: 'none' },
     accentColor: initialFace?.config?.accentColor || '#10b981'
   });
 
@@ -195,6 +232,7 @@ const CreateView: React.FC<{
       setPrompt(initialFace.prompt);
       setSelectedStyle(initialFace.style);
       if (initialFace.config) setConfig(initialFace.config);
+      if (initialFace.targetDevice) setSelectedDevice(initialFace.targetDevice);
     }
   }, [initialFace]);
 
@@ -226,8 +264,9 @@ const CreateView: React.FC<{
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     
-    // Check credits/subscription
+    // Check credits/subscription with STRICT logic
     if (!user.isPro && user.credits <= 0) {
+      // Force store open if out of credits
       onOpenStore();
       return;
     }
@@ -237,15 +276,15 @@ const CreateView: React.FC<{
     setCurrentResult(null); 
 
     try {
-      const result = await onGenerate(prompt, selectedStyle);
+      // Pass the specific device model here
+      const result = await onGenerate(prompt, selectedStyle, selectedDevice);
       if (result) {
         setCurrentResult(result);
-        // Reset config defaults on new generation, or maybe call AI suggest?
-        setConfig({
+        // Reset defaults
+        setConfig(prev => ({
+             ...prev,
              handStyle: WatchHandStyle.CLASSIC,
-             complicationLayout: ComplicationLayout.MINIMAL,
-             accentColor: '#ffffff'
-        });
+        }));
       }
     } catch (e: any) {
       let title = "Generation Failed";
@@ -267,7 +306,12 @@ const CreateView: React.FC<{
     setIsConfiguring(true);
     try {
         const suggested = await suggestFaceConfig(currentResult.prompt, currentResult.style);
-        setConfig(suggested);
+        // Map simple suggest response to new granular response if needed, for now just partial update
+        setConfig(prev => ({
+            ...prev,
+            handStyle: suggested.handStyle,
+            accentColor: suggested.accentColor
+        }));
     } catch(e) {
         console.error(e);
     } finally {
@@ -282,44 +326,23 @@ const CreateView: React.FC<{
       }
   };
 
-  const handleExportWFF = () => {
-    if (!currentResult) return;
-    
-    // Mock WFF XML Content
-    const wffXml = `
-<?xml version="1.0" ?>
-<WatchFace width="450" height="450">
-    <Metadata key="author" value="FaceGen AI User"/>
-    <Metadata key="name" value="${currentResult.prompt.slice(0, 20)}"/>
-    <Scene>
-        <Image resource="background_image" x="0" y="0" width="450" height="450" />
-        <AnalogClock>
-             <HourHand resource="${config.handStyle}_hour" x="225" y="225" />
-             <MinuteHand resource="${config.handStyle}_minute" x="225" y="225" />
-        </AnalogClock>
-        <!-- Complications Layout: ${config.complicationLayout} -->
-    </Scene>
-</WatchFace>
-    `.trim();
+  const complicationTypes: {type: ComplicationType, label: string, icon: React.ReactNode}[] = [
+      { type: 'none', label: 'None', icon: <X size={12} /> },
+      { type: 'date', label: 'Date', icon: <Calendar size={12} /> },
+      { type: 'weather', label: 'Weather', icon: <Cloud size={12} /> },
+      { type: 'battery', label: 'Battery', icon: <Battery size={12} /> },
+      { type: 'steps', label: 'Steps', icon: <Footprints size={12} /> },
+      { type: 'heartrate', label: 'Heart', icon: <Heart size={12} /> },
+  ];
 
-    // Create blobs for download
-    const xmlBlob = new Blob([wffXml], { type: 'text/xml' });
-    const xmlUrl = URL.createObjectURL(xmlBlob);
-    
-    const xmlLink = document.createElement('a');
-    xmlLink.href = xmlUrl;
-    xmlLink.download = 'watchface.xml';
-    document.body.appendChild(xmlLink);
-    xmlLink.click();
-    document.body.removeChild(xmlLink);
-
-    // Trigger image download separately or user can do it from preview
-    const link = document.createElement('a');
-    link.href = currentResult.imageUrl;
-    link.download = `facegen_${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const updateComplication = (slot: keyof typeof config.complications, type: ComplicationType) => {
+      setConfig(prev => ({
+          ...prev,
+          complications: {
+              ...prev.complications,
+              [slot]: type
+          }
+      }));
   };
 
   return (
@@ -331,7 +354,7 @@ const CreateView: React.FC<{
             {currentResult?.isPreset ? 'Customize Preset' : 'AI Studio'}
           </h1>
           <p className="text-neutral-400">
-             Design, Customize, and Export.
+             Design specific faces for your {selectedDevice.name}.
           </p>
         </div>
 
@@ -367,34 +390,66 @@ const CreateView: React.FC<{
           />
         </div>
 
-        {/* 2. Style & Platform */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* 2. Device & Style Selection */}
+        <div className="grid grid-cols-1 gap-4">
+           
+           {/* Robust Device Selector */}
+           <div className="space-y-2 relative">
+             <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Target Watch Model</label>
+             <div className="relative">
+                <button 
+                  onClick={() => setShowDeviceDropdown(!showDeviceDropdown)}
+                  className="w-full flex items-center justify-between bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-sm text-white hover:border-neutral-700 transition-colors"
+                >
+                   <span className="flex items-center gap-2">
+                      <Smartphone size={16} className="text-neutral-500" />
+                      {selectedDevice.name}
+                   </span>
+                   <ArrowRight size={14} className="rotate-90 text-neutral-600" />
+                </button>
+
+                {showDeviceDropdown && (
+                   <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                      <div className="sticky top-0 bg-neutral-900 p-2 border-b border-neutral-800">
+                         <div className="flex items-center gap-2 bg-neutral-800 rounded-lg px-2 py-1.5">
+                            <Search size={14} className="text-neutral-500" />
+                            <input 
+                              autoFocus
+                              className="bg-transparent text-xs text-white placeholder-neutral-500 focus:outline-none w-full"
+                              placeholder="Search Apple, Samsung, Pixel..."
+                              value={deviceSearch}
+                              onChange={(e) => setDeviceSearch(e.target.value)}
+                            />
+                         </div>
+                      </div>
+                      {filteredDevices.map(device => (
+                         <button
+                           key={device.id}
+                           onClick={() => {
+                             setSelectedDevice(device);
+                             setShowDeviceDropdown(false);
+                             setDeviceSearch('');
+                           }}
+                           className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 hover:text-white flex justify-between items-center"
+                         >
+                            {device.name}
+                            {selectedDevice.id === device.id && <Check size={14} className="text-primary" />}
+                         </button>
+                      ))}
+                   </div>
+                )}
+             </div>
+           </div>
+
            <div className="space-y-2">
-              <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Style</label>
+              <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Art Style</label>
               <select 
                 value={selectedStyle}
                 onChange={(e) => setSelectedStyle(e.target.value as WatchStyle)}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-primary"
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-primary"
               >
                  {Object.values(WatchStyle).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
-           </div>
-           <div className="space-y-2">
-              <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wide">Device</label>
-              <div className="flex bg-neutral-900 p-1 rounded-lg border border-neutral-800">
-                <button 
-                  onClick={() => setPlatform(Platform.WEAR_OS)}
-                  className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${platform === Platform.WEAR_OS ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-500 hover:text-white'}`}
-                >
-                  Wear OS
-                </button>
-                <button 
-                  onClick={() => setPlatform(Platform.APPLE_WATCH)}
-                  className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${platform === Platform.APPLE_WATCH ? 'bg-neutral-800 text-white shadow-sm' : 'text-neutral-500 hover:text-white'}`}
-                >
-                  Apple Watch
-                </button>
-              </div>
            </div>
         </div>
 
@@ -409,7 +464,7 @@ const CreateView: React.FC<{
             </>
           ) : (
             <>
-              <Sparkles size={18} /> Generate Background
+              <Sparkles size={18} /> Generate for {selectedDevice.brand}
             </>
           )}
         </button>
@@ -460,16 +515,55 @@ const CreateView: React.FC<{
                  </div>
               </div>
 
-              {/* Complications */}
+              {/* Advanced Complications Editor */}
               <div className="space-y-2">
-                 <label className="text-xs font-semibold text-neutral-400 uppercase">Complications</label>
-                 <select
-                    value={config.complicationLayout}
-                    onChange={(e) => setConfig({...config, complicationLayout: e.target.value as ComplicationLayout})}
-                    className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-sm text-white focus:outline-none"
-                 >
-                    {Object.values(ComplicationLayout).map(l => <option key={l} value={l}>{l}</option>)}
-                 </select>
+                 <label className="text-xs font-semibold text-neutral-400 uppercase">Complication Slots</label>
+                 <div className="grid grid-cols-2 gap-4">
+                    {/* Top Slot */}
+                    <div className="space-y-1">
+                        <span className="text-[10px] text-neutral-500 uppercase">Top</span>
+                        <select 
+                            value={config.complications.top}
+                            onChange={(e) => updateComplication('top', e.target.value as ComplicationType)}
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white"
+                        >
+                            {complicationTypes.map(c => <option key={c.type} value={c.type}>{c.label}</option>)}
+                        </select>
+                    </div>
+                     {/* Bottom Slot */}
+                    <div className="space-y-1">
+                        <span className="text-[10px] text-neutral-500 uppercase">Bottom</span>
+                        <select 
+                            value={config.complications.bottom}
+                            onChange={(e) => updateComplication('bottom', e.target.value as ComplicationType)}
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white"
+                        >
+                            {complicationTypes.map(c => <option key={c.type} value={c.type}>{c.label}</option>)}
+                        </select>
+                    </div>
+                     {/* Left Slot */}
+                     <div className="space-y-1">
+                        <span className="text-[10px] text-neutral-500 uppercase">Left</span>
+                        <select 
+                            value={config.complications.left}
+                            onChange={(e) => updateComplication('left', e.target.value as ComplicationType)}
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white"
+                        >
+                            {complicationTypes.map(c => <option key={c.type} value={c.type}>{c.label}</option>)}
+                        </select>
+                    </div>
+                     {/* Right Slot */}
+                     <div className="space-y-1">
+                        <span className="text-[10px] text-neutral-500 uppercase">Right</span>
+                        <select 
+                            value={config.complications.right}
+                            onChange={(e) => updateComplication('right', e.target.value as ComplicationType)}
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-2 text-xs text-white"
+                        >
+                            {complicationTypes.map(c => <option key={c.type} value={c.type}>{c.label}</option>)}
+                        </select>
+                    </div>
+                 </div>
               </div>
               
               {/* Accent Color */}
@@ -493,9 +587,10 @@ const CreateView: React.FC<{
       <div className="lg:col-span-7 flex flex-col items-center">
         <div className="bg-surface border border-white/5 rounded-3xl p-8 w-full flex flex-col items-center justify-center min-h-[500px] relative">
            
+           {/* Pass selectedDevice to preview instead of just platform */}
            <WatchPreview 
              imageUrl={currentResult?.imageUrl || null} 
-             platform={platform} 
+             platform={selectedDevice.brand === 'Apple' ? Platform.APPLE_WATCH : Platform.WEAR_OS} 
              isLoading={isGenerating} 
              config={config}
            />
@@ -511,7 +606,6 @@ const CreateView: React.FC<{
                     <Save size={16} /> Save
                   </button>
                   <button 
-                    onClick={handleExportWFF}
                     className="py-3 bg-white text-black font-bold rounded-xl text-sm hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2"
                   >
                     <FileCode size={16} /> Export WFF
@@ -519,7 +613,7 @@ const CreateView: React.FC<{
                </div>
                
                <p className="text-xs text-neutral-500">
-                  Export includes <code>watchface.xml</code> and background image. Compatible with Android Studio & Galaxy Watch Studio.
+                  Optimized for <strong>{selectedDevice.name}</strong>. Export includes XML & assets.
                </p>
              </div>
            )}
@@ -559,7 +653,7 @@ const ExploreView: React.FC<{
           </div>
           <div className="relative z-10 mb-6">
               <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">New This Week</span>
+                  <span className="bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">New This Week</span>
               </div>
               <h2 className="text-2xl font-bold text-white">Weekly Drops</h2>
               <p className="text-indigo-200 text-sm">Fresh premium styles curated for you every Monday.</p>
@@ -581,6 +675,9 @@ const ExploreView: React.FC<{
                            <Lock className="text-indigo-400" size={24} />
                         </div>
                      )}
+                     <div className="absolute top-2 right-2">
+                        <Star className="fill-amber-400 text-amber-400" size={16} />
+                     </div>
                   </div>
               ))}
           </div>
@@ -655,44 +752,52 @@ const ExploreView: React.FC<{
 
 // --- Main App ---
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('explore'); // Default to Explore to show off content
+  const [user, setUser] = useState<User | null>(null);
+  const [currentPage, setCurrentPage] = useState('explore'); 
   const [isStoreOpen, setIsStoreOpen] = useState(false);
-  const [user, setUser] = useState<User>({
-    credits: 3, 
-    isPro: false,
-    library: []
-  });
-  const [platform, setPlatform] = useState<Platform>(Platform.WEAR_OS);
+  const [storeMessage, setStoreMessage] = useState<string | null>(null);
+  const [selectedDevice, setSelectedDevice] = useState<DeviceDefinition>(SUPPORTED_DEVICES[0]);
   const [selectedFace, setSelectedFace] = useState<GeneratedFace | null>(null);
 
   // Gemini Integration
-  const handleGenerate = useCallback(async (prompt: string, style: WatchStyle): Promise<GeneratedFace | null> => {
+  const handleGenerate = useCallback(async (prompt: string, style: WatchStyle, device: DeviceDefinition): Promise<GeneratedFace | null> => {
+    if (!user) return null;
+
     try {
-      if (!user.isPro) {
-         setUser(prev => ({ ...prev, credits: prev.credits - 1 }));
+      // STRICT CREDIT CHECK
+      if (!user.isPro && user.credits <= 0) {
+        setStoreMessage("You've run out of free credits! Upgrade to Pro for unlimited access or top up now.");
+        setIsStoreOpen(true);
+        return null;
       }
 
-      const face = await generateWatchFaceImage(prompt, style);
+      // Deduct credit optimistically (restore on fail)
+      if (!user.isPro) {
+         setUser(prev => prev ? ({ ...prev, credits: prev.credits - 1 }) : null);
+      }
+
+      const face = await generateWatchFaceImage(prompt, style, device);
       
       // Auto-add to library
-      setUser(prev => ({
+      setUser(prev => prev ? ({
         ...prev,
         library: [face, ...prev.library]
-      }));
+      }) : null);
       
       return face;
     } catch (error) {
-      if (!user.isPro) {
-        setUser(prev => ({ ...prev, credits: prev.credits + 1 }));
+      if (!user?.isPro) {
+        setUser(prev => prev ? ({ ...prev, credits: prev.credits + 1 }) : null);
       }
       throw error;
     }
-  }, [user.isPro]);
+  }, [user]);
 
   const handleSaveFace = (face: GeneratedFace, config: FaceConfiguration) => {
      // Update face with new config and ensure it's in library
      const updatedFace = { ...face, config };
      setUser(prev => {
+         if (!prev) return null;
          const exists = prev.library.find(f => f.id === face.id);
          if (exists) {
              return {
@@ -706,22 +811,26 @@ export default function App() {
   };
 
   const handlePurchase = (plan: PricingPlan) => {
-    console.log("Initiating Native Purchase Flow for:", plan.id);
-    setTimeout(() => {
-      setIsStoreOpen(false);
-      if (plan.type === 'subscription') {
-        setUser(prev => ({ ...prev, isPro: true }));
-        alert("Subscription Active! You now have unlimited access.");
-      } else {
-        setUser(prev => ({ ...prev, credits: prev.credits + (plan.credits || 0) }));
-        alert(`Successfully added ${plan.credits} credits!`);
-      }
-    }, 1000);
+    // This function is called AFTER the "Mock" payment is processed successfully in Store.tsx
+    if (plan.type === 'subscription') {
+      setUser(prev => prev ? ({ ...prev, isPro: true }) : null);
+      alert("Subscription Active! You now have unlimited access.");
+    } else {
+      setUser(prev => prev ? ({ ...prev, credits: prev.credits + (plan.credits || 0) }) : null);
+      alert(`Successfully added ${plan.credits} credits!`);
+    }
+    setIsStoreOpen(false);
+    setStoreMessage(null);
   };
 
   const handleManageSubscription = () => {
     alert("This would open the Google Play Subscription Management screen.");
   };
+
+  // If not logged in, show Auth
+  if (!user) {
+    return <Auth onLogin={(u) => setUser(u)} />;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -732,7 +841,11 @@ export default function App() {
           setCurrentPage(page);
           if (page === 'create') setSelectedFace(null);
         }} 
-        onOpenStore={() => setIsStoreOpen(true)}
+        onOpenStore={() => {
+            setStoreMessage(null);
+            setIsStoreOpen(true);
+        }}
+        onLogout={() => setUser(null)}
       />
 
       <main className="flex-grow">
@@ -741,8 +854,8 @@ export default function App() {
             user={user} 
             onGenerate={handleGenerate} 
             onSave={handleSaveFace}
-            platform={platform}
-            setPlatform={setPlatform}
+            selectedDevice={selectedDevice}
+            setSelectedDevice={setSelectedDevice}
             onOpenStore={() => setIsStoreOpen(true)}
             initialFace={selectedFace}
           />
@@ -795,6 +908,7 @@ export default function App() {
       {isStoreOpen && (
         <Store 
           user={user} 
+          message={storeMessage}
           onClose={() => setIsStoreOpen(false)} 
           onPurchase={handlePurchase}
           onManageSubscription={handleManageSubscription}

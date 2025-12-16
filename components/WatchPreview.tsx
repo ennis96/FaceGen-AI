@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, FaceConfiguration, WatchHandStyle, ComplicationLayout } from '../types';
+import { Platform, FaceConfiguration, WatchHandStyle, ComplicationType } from '../types';
+import { Battery, Cloud, Footprints, Heart, Calendar } from './Icons';
 
 interface WatchPreviewProps {
   imageUrl: string | null;
@@ -19,20 +20,16 @@ const WatchPreview: React.FC<WatchPreviewProps> = ({ imageUrl, platform, isLoadi
   const hrs = time.getHours();
   const mins = time.getMinutes();
   const secs = time.getSeconds();
-  const dateStr = time.toLocaleDateString([], { weekday: 'short', day: 'numeric' });
-
+  
   // Calculate rotation degrees for analog hands
   const hrRotation = (hrs % 12) * 30 + (mins / 2);
   const minRotation = mins * 6;
   const secRotation = secs * 6;
 
-  const activeConfig = config || {
-     handStyle: WatchHandStyle.CLASSIC,
-     complicationLayout: ComplicationLayout.MINIMAL,
-     accentColor: '#ffffff'
-  };
-
-  const { handStyle, complicationLayout, accentColor } = activeConfig;
+  // Defaults
+  const handStyle = config?.handStyle || WatchHandStyle.CLASSIC;
+  const complications = config?.complications || { top: 'none', bottom: 'none', left: 'none', right: 'none' };
+  const accentColor = config?.accentColor || '#ffffff';
 
   // Styles for the physical watch casing
   const caseClasses = platform === Platform.APPLE_WATCH
@@ -89,17 +86,14 @@ const WatchPreview: React.FC<WatchPreviewProps> = ({ imageUrl, platform, isLoadi
   };
 
   const renderDigitalTime = () => {
-    // Show digital time if specifically Digital style OR if layout includes full/digital elements
-    if (handStyle !== WatchHandStyle.DIGITAL && complicationLayout !== ComplicationLayout.FULL) return null;
-
-    // If hands are shown, digital time is small. If Digital Only, it's huge.
     const isBig = handStyle === WatchHandStyle.DIGITAL;
+    if (!isBig) return null;
 
     return (
-       <div className={`absolute ${isBig ? 'inset-0 flex items-center justify-center' : 'top-8 w-full flex justify-center'} z-10 text-white drop-shadow-md`}>
+       <div className={`absolute inset-0 flex items-center justify-center z-10 text-white drop-shadow-md`}>
           <span 
-            className={`${isBig ? 'text-6xl md:text-7xl font-bold tracking-tighter' : 'text-xl font-medium'} leading-none`}
-            style={{ color: isBig ? accentColor : 'white' }}
+            className={`text-6xl md:text-7xl font-bold tracking-tighter leading-none`}
+            style={{ color: accentColor }}
           >
              {hrs}:{String(mins).padStart(2, '0')}
           </span>
@@ -107,39 +101,43 @@ const WatchPreview: React.FC<WatchPreviewProps> = ({ imageUrl, platform, isLoadi
     );
   };
 
-  const renderComplications = () => {
-     if (complicationLayout === ComplicationLayout.NONE) return null;
+  const getComplicationIcon = (type: ComplicationType) => {
+      switch(type) {
+          case 'battery': return <Battery size={14} className="text-white/80" />;
+          case 'weather': return <Cloud size={14} className="text-white/80" />;
+          case 'steps': return <Footprints size={14} className="text-white/80" />;
+          case 'heartrate': return <Heart size={14} className="text-white/80" />;
+          case 'date': return <Calendar size={14} className="text-white/80" />;
+          default: return null;
+      }
+  };
 
-     return (
-        <div className="absolute inset-0 p-6 pointer-events-none z-10 flex flex-col justify-between text-white drop-shadow-md">
-           {/* Top Complication */}
-           <div className="flex justify-center">
-              {complicationLayout !== ComplicationLayout.NONE && (
-                 <span className="text-xs font-semibold uppercase tracking-wider bg-black/20 px-2 py-0.5 rounded-full backdrop-blur-sm">
-                    {dateStr}
-                 </span>
-              )}
-           </div>
+  const getComplicationValue = (type: ComplicationType) => {
+    switch(type) {
+        case 'battery': return '85%';
+        case 'weather': return '72°';
+        case 'steps': return '8,542';
+        case 'heartrate': return '68';
+        case 'date': return time.toLocaleDateString([], { weekday: 'short', day: 'numeric' });
+        default: return '';
+    }
+  };
 
-           {/* Bottom Complications (Activity) */}
-           <div className="flex justify-between items-end">
-              {(complicationLayout === ComplicationLayout.ACTIVITY || complicationLayout === ComplicationLayout.FULL) && (
-                 <>
-                  <div className="flex flex-col items-center gap-0.5">
-                     <div className="w-8 h-8 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center text-[9px] font-bold">
-                        75%
-                     </div>
-                     <span className="text-[10px] uppercase opacity-80">Steps</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-0.5">
-                     <span className="text-xl font-bold leading-none" style={{ color: accentColor }}>72</span>
-                     <span className="text-[10px] uppercase opacity-80">BPM</span>
-                  </div>
-                 </>
-              )}
-           </div>
-        </div>
-     );
+  const renderSingleComplication = (type: ComplicationType, position: 'top' | 'bottom' | 'left' | 'right') => {
+      if (type === 'none') return null;
+
+      let posClasses = '';
+      if (position === 'top') posClasses = 'top-4 left-1/2 -translate-x-1/2';
+      if (position === 'bottom') posClasses = 'bottom-4 left-1/2 -translate-x-1/2';
+      if (position === 'left') posClasses = 'left-4 top-1/2 -translate-y-1/2';
+      if (position === 'right') posClasses = 'right-4 top-1/2 -translate-y-1/2';
+
+      return (
+          <div className={`absolute ${posClasses} flex flex-col items-center justify-center p-1 rounded-full z-10 drop-shadow-md bg-black/20 backdrop-blur-sm`}>
+              {getComplicationIcon(type)}
+              <span className="text-[9px] font-bold text-white mt-0.5">{getComplicationValue(type)}</span>
+          </div>
+      );
   };
 
   return (
@@ -166,7 +164,11 @@ const WatchPreview: React.FC<WatchPreviewProps> = ({ imageUrl, platform, isLoadi
           {/* Overlays */}
           {!isLoading && (
              <>
-               {renderComplications()}
+               {renderSingleComplication(complications.top, 'top')}
+               {renderSingleComplication(complications.bottom, 'bottom')}
+               {renderSingleComplication(complications.left, 'left')}
+               {renderSingleComplication(complications.right, 'right')}
+               
                {renderDigitalTime()}
                {renderAnalogHands()}
              </>

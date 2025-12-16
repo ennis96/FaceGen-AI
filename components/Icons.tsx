@@ -25,7 +25,18 @@ import {
   Layers,
   FileCode,
   Save,
-  Calendar
+  Calendar,
+  LogOut,
+  User,
+  Mail,
+  Smartphone,
+  ArrowRight,
+  Search,
+  Battery,
+  Cloud,
+  Heart,
+  Footprints,
+  Shield
 } from 'lucide-react';
 
 export { 
@@ -45,14 +56,25 @@ export {
   Crown,
   Check,
   AlertCircle,
-  Info,
-  Lock,
-  Wand2,
+  Info, 
+  Lock, 
+  Wand2, 
   Star,
   Dice5,
   Clock,
   Layers,
   FileCode,
   Save,
-  Calendar
+  Calendar,
+  LogOut,
+  User,
+  Mail,
+  Smartphone,
+  ArrowRight,
+  Search,
+  Battery,
+  Cloud,
+  Heart,
+  Footprints,
+  Shield
 };
