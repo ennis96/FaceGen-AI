@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Highly permissive CSP for development/preview environments to allow Babel Standalone -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <title>FaceGen AI - Custom Watch Face Designer</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,13 +29,11 @@
     <script>
       window.process = {
         env: {
-          // In a real build, this is replaced. For GH Pages demo, it prevents crashing.
-          // You must set your API Key here or in your local env if running locally.
           NODE_ENV: 'production'
         }
       };
     </script>
-    <!-- Babel Standalone for in-browser compilation of TSX -->
+    <!-- Babel Standalone for in-browser compilation of TSX (Fallback for non-build environments) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -43,20 +42,29 @@
         color: #fafafa;
         font-family: 'Inter', sans-serif;
       }
-      /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
+      /* Loading Animation */
+      #root:empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
       }
-      ::-webkit-scrollbar-track {
-        background: #18181b; 
+      #root:empty::after {
+        content: "Loading FaceGen AI...";
+        color: #10b981;
+        font-size: 1.2rem;
+        font-weight: 600;
+        animation: pulse 1.5s infinite;
       }
-      ::-webkit-scrollbar-thumb {
-        background: #27272a; 
-        border-radius: 4px;
+      @keyframes pulse {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #3f3f46; 
-      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #18181b; }
+      ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
     </style>
   <script type="importmap">
 {
@@ -65,14 +73,27 @@
     "react": "https://esm.sh/react@^19.2.3",
     "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
-    <!-- Entry Point: Note the type="text/babel" and extension -->
+    
+    <!-- Entry Point -->
+    <!-- Note: For production, use 'npm run build' and upload the dist folder. -->
     <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
+    
+    <!-- Error Handler for Scripts -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.message.includes('import')) {
+            console.warn("Import error detected. If running on GitHub Pages without a build, ensure file paths are correct or try using the Build step.");
+        }
+      });
+    </script>
   </body>
 </html>
