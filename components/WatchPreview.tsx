@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, FaceConfiguration, WatchHandStyle, ComplicationType } from '../types';
-import { Battery, Cloud, Footprints, Heart, Calendar } from './Icons';
+import { Platform, FaceConfiguration, WatchHandStyle, ComplicationType } from '../types.ts';
+import { Battery, Cloud, Footprints, Heart, Calendar } from './Icons.tsx';
 
 interface WatchPreviewProps {
   imageUrl: string | null;

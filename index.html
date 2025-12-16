@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <title>FaceGen AI - Custom Watch Face Designer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,6 +24,18 @@
         },
       };
     </script>
+    <!-- Polyfill process.env for browser environment -->
+    <script>
+      window.process = {
+        env: {
+          // In a real build, this is replaced. For GH Pages demo, it prevents crashing.
+          // You must set your API Key here or in your local env if running locally.
+          NODE_ENV: 'production'
+        }
+      };
+    </script>
+    <!-- Babel Standalone for in-browser compilation of TSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
       body {
@@ -59,5 +72,7 @@
 </head>
   <body>
     <div id="root"></div>
+    <!-- Entry Point: Note the type="text/babel" and extension -->
+    <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
   </body>
 </html>

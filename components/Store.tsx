@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Check, Crown, Zap, Sparkles, Settings, Star, CreditCard, Lock, Loader2, AlertCircle } from './Icons';
-import { PricingPlan, User } from '../types';
+import { Check, Crown, Zap, Sparkles, Settings, Star, CreditCard, Lock, Loader2, AlertCircle } from './Icons.tsx';
+import { PricingPlan, User } from '../types.ts';
 
 interface StoreProps {
   onClose: () => void;

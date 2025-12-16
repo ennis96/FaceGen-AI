@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { GeneratedFace, WatchStyle, FaceConfiguration, WatchHandStyle, ComplicationLayout, DeviceDefinition, WatchShape, ComplicationSlots } from "../types";
+import { GeneratedFace, WatchStyle, FaceConfiguration, WatchHandStyle, ComplicationLayout, DeviceDefinition, WatchShape, ComplicationSlots } from "../types.ts";
 
 // Initialize Gemini API
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });

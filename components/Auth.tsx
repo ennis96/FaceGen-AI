@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Lock, CheckCircle, AlertCircle, Loader2, ArrowRight, User as UserIcon, Shield } from './Icons';
-import { User } from '../types';
+import { Mail, Lock, CheckCircle, AlertCircle, Loader2, ArrowRight, User as UserIcon, Shield } from './Icons.tsx';
+import { User } from '../types.ts';
 
 interface AuthProps {
   onLogin: (user: User) => void;

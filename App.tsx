@@ -7,12 +7,12 @@ import {
   LogOut, User as UserIcon, Smartphone, Search,
   ArrowRight, Check, Battery, Cloud, Heart, Footprints,
   BookOpen
-} from './components/Icons';
-import WatchPreview from './components/WatchPreview';
-import Store from './components/Store';
-import Auth from './components/Auth';
-import { generateWatchFaceImage, enhancePrompt, generateRandomPrompt, suggestFaceConfig, GenerationError } from './services/geminiService';
-import { WatchStyle, GeneratedFace, Platform, User, PricingPlan, WatchHandStyle, ComplicationType, FaceConfiguration, SUPPORTED_DEVICES, DeviceDefinition, WatchShape } from './types';
+} from './components/Icons.tsx';
+import WatchPreview from './components/WatchPreview.tsx';
+import Store from './components/Store.tsx';
+import Auth from './components/Auth.tsx';
+import { generateWatchFaceImage, enhancePrompt, generateRandomPrompt, suggestFaceConfig, GenerationError } from './services/geminiService.ts';
+import { WatchStyle, GeneratedFace, Platform, User, PricingPlan, WatchHandStyle, ComplicationType, FaceConfiguration, SUPPORTED_DEVICES, DeviceDefinition, WatchShape } from './types.ts';
 
 // --- Static Data: Preset Collections ---
 const PRESET_LIBRARY: GeneratedFace[] = [
