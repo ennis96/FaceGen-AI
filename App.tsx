@@ -5,7 +5,8 @@ import {
   Loader2, Share2, Crown, AlertCircle, Lock, Wand2,
   Dice5, Clock, Layers, FileCode, Save, Calendar, Star,
   LogOut, User as UserIcon, Smartphone, Search,
-  ArrowRight, Check, Battery, Cloud, Heart, Footprints
+  ArrowRight, Check, Battery, Cloud, Heart, Footprints,
+  BookOpen
 } from './components/Icons';
 import WatchPreview from './components/WatchPreview';
 import Store from './components/Store';
@@ -30,33 +31,21 @@ const PRESET_LIBRARY: GeneratedFace[] = [
   { id: 'p_lux_1', style: WatchStyle.LUXURY, prompt: 'Gold Mechanism', imageUrl: 'https://images.unsplash.com/photo-1614726365723-49cfae96a6f6?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
   { id: 'p_nat_1', style: WatchStyle.NATURE, prompt: 'Volcanic Texture', imageUrl: 'https://images.unsplash.com/photo-1506543730435-f2c1d2c87983?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
   
-  // --- RELIGIOUS & CULTURAL COLLECTION (GLOBAL) ---
+  // --- RELIGIOUS & CULTURAL COLLECTION (FIXED IMAGES) ---
   // ISLAM
-  { id: 'rel_isl_1', style: WatchStyle.ISLAMIC, prompt: 'Golden Mosque Dome', imageUrl: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'rel_isl_2', style: WatchStyle.ISLAMIC, prompt: 'Ramadan Lanterns', imageUrl: 'https://images.unsplash.com/photo-1587573088697-b4480442355e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'rel_isl_3', style: WatchStyle.ISLAMIC, prompt: 'Blue Tile Patterns', imageUrl: 'https://images.unsplash.com/photo-1580251703666-4155fb2721f4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-
+  { id: 'rel_isl_1', style: WatchStyle.ISLAMIC, prompt: 'Golden Mosque Art', imageUrl: 'https://images.unsplash.com/photo-1549488331-5079ae89c629?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // CHRISTIANITY
-  { id: 'rel_chr_1', style: WatchStyle.RELIGIOUS, prompt: 'Stained Glass Art', imageUrl: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'rel_chr_2', style: WatchStyle.RELIGIOUS, prompt: 'Christmas Candles', imageUrl: 'https://images.unsplash.com/photo-1513297887119-d46091b24bfa?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  
+  { id: 'rel_chr_1', style: WatchStyle.RELIGIOUS, prompt: 'Stained Glass', imageUrl: 'https://images.unsplash.com/photo-1548625361-12f7169f5b68?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // HINDUISM
-  { id: 'rel_hin_1', style: WatchStyle.RELIGIOUS, prompt: 'Diwali Lamps (Diyas)', imageUrl: 'https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'rel_hin_2', style: WatchStyle.RELIGIOUS, prompt: 'Holi Colors Abstract', imageUrl: 'https://images.unsplash.com/photo-1550948329-1393845bb084?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  { id: 'rel_hin_3', style: WatchStyle.RELIGIOUS, prompt: 'Ganesh Statue Gold', imageUrl: 'https://images.unsplash.com/photo-1567591414240-e791e8e2e22c?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-
+  { id: 'rel_hin_1', style: WatchStyle.RELIGIOUS, prompt: 'Diwali Lamps', imageUrl: 'https://images.unsplash.com/photo-1601654316024-5d97f26d7f08?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // BUDDHISM
-  { id: 'rel_bud_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Buddha Statue', imageUrl: 'https://images.unsplash.com/photo-1596720614569-826d9c6e5a62?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-  { id: 'rel_bud_2', style: WatchStyle.RELIGIOUS, prompt: 'Lotus Flower Pond', imageUrl: 'https://images.unsplash.com/photo-1584305813353-8d6e91fc8976?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-
+  { id: 'rel_bud_1', style: WatchStyle.RELIGIOUS, prompt: 'Buddha Statue', imageUrl: 'https://images.unsplash.com/photo-1605645517173-67098e9b6a1e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // JUDAISM
-  { id: 'rel_jud_1', style: WatchStyle.RELIGIOUS, prompt: 'Hanukkah Menorah', imageUrl: 'https://images.unsplash.com/photo-1543787720-3b7c4d5d4d3d?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
-
+  { id: 'rel_jud_1', style: WatchStyle.RELIGIOUS, prompt: 'Hanukkah Menorah', imageUrl: 'https://images.unsplash.com/photo-1607530460395-585a06558e8e?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // SIKHISM
-  { id: 'rel_sik_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Temple Light', imageUrl: 'https://images.unsplash.com/photo-1570183180299-c5603b222340?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
-  
+  { id: 'rel_sik_1', style: WatchStyle.RELIGIOUS, prompt: 'Golden Temple', imageUrl: 'https://images.unsplash.com/photo-1587392652932-51a084c8d5a1?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
   // JAPANESE/SHINTO
-  { id: 'rel_shin_1', style: WatchStyle.RELIGIOUS, prompt: 'Red Torii Gate', imageUrl: 'https://images.unsplash.com/photo-1528360983277-13d9b152c6d4?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: true },
+  { id: 'rel_shin_1', style: WatchStyle.RELIGIOUS, prompt: 'Torii Gate', imageUrl: 'https://images.unsplash.com/photo-1528164344705-4754268798dd?q=80&w=800&auto=format&fit=crop', createdAt: Date.now(), isPreset: true, isPremium: false },
 ];
 
 // --- Utilities ---
@@ -74,6 +63,65 @@ const getWeeklyDropFaces = () => {
     }
     return drops;
 };
+
+// --- Components ---
+
+const GuideOverlay: React.FC<{ onClose: () => void }> = ({ onClose }) => (
+    <div className="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in">
+        <div className="bg-neutral-900 border border-white/10 rounded-3xl max-w-2xl w-full p-8 shadow-2xl relative">
+            <button onClick={onClose} className="absolute top-4 right-4 text-neutral-400 hover:text-white"><X size={24} /></button>
+            
+            <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <BookOpen size={32} />
+                </div>
+                <h2 className="text-2xl font-bold text-white">How to Create Your Custom Face</h2>
+                <p className="text-neutral-400 mt-2">Follow these 4 simple steps to design the perfect watch face.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-neutral-800/50 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-blue-500/20 text-blue-400 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                        <h3 className="font-bold text-white">Type Your Idea</h3>
+                    </div>
+                    <p className="text-sm text-neutral-400">Describe exactly what you want. E.g., "A futuristic neon city with rain" or "Classic gold analog with marble background".</p>
+                </div>
+
+                <div className="bg-neutral-800/50 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-purple-500/20 text-purple-400 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                        <h3 className="font-bold text-white">Select Your Device</h3>
+                    </div>
+                    <p className="text-sm text-neutral-400">Choose your exact watch model (Apple Watch, Galaxy Watch, etc.) so we generate the correct shape and size.</p>
+                </div>
+
+                <div className="bg-neutral-800/50 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-amber-500/20 text-amber-400 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                        <h3 className="font-bold text-white">Choose Art Style</h3>
+                    </div>
+                    <p className="text-sm text-neutral-400">Pick a style that matches your vision, from "Cyberpunk" to "Watercolor" or "Classic Luxury".</p>
+                </div>
+
+                <div className="bg-neutral-800/50 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                        <h3 className="font-bold text-white">Generate & Customize</h3>
+                    </div>
+                    <p className="text-sm text-neutral-400">Hit Generate! Then add complications (battery, steps, weather) and save it to your library.</p>
+                </div>
+            </div>
+
+            <button 
+                onClick={onClose}
+                className="w-full mt-8 bg-primary hover:bg-emerald-400 text-black font-bold py-3 rounded-xl transition-all"
+            >
+                Got it, Let's Create!
+            </button>
+        </div>
+    </div>
+);
 
 // --- Header ---
 const Header: React.FC<{ 
@@ -212,6 +260,7 @@ const CreateView: React.FC<{
   const [error, setError] = useState<{title: string, message: string} | null>(null);
   const [deviceSearch, setDeviceSearch] = useState('');
   const [showDeviceDropdown, setShowDeviceDropdown] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   // Filter devices logic
   const filteredDevices = SUPPORTED_DEVICES.filter(d => 
@@ -346,16 +395,27 @@ const CreateView: React.FC<{
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 grid lg:grid-cols-12 gap-8">
+    <div className="container mx-auto px-4 py-8 grid lg:grid-cols-12 gap-8 relative">
+      {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
+      
       {/* Controls */}
       <div className="lg:col-span-5 space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
-            {currentResult?.isPreset ? 'Customize Preset' : 'AI Studio'}
-          </h1>
-          <p className="text-neutral-400">
-             Design specific faces for your {selectedDevice.name}.
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
+                {currentResult?.isPreset ? 'Customize Preset' : 'AI Studio'}
+            </h1>
+            <p className="text-neutral-400">
+                Design specific faces for your {selectedDevice.name}.
+            </p>
+          </div>
+          <button 
+             onClick={() => setShowGuide(true)}
+             className="text-neutral-400 hover:text-white transition-colors p-2"
+             title="How to use"
+          >
+             <BookOpen size={20} />
+          </button>
         </div>
 
         {/* 1. Prompt Section */}

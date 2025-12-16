@@ -36,7 +36,8 @@ import {
   Cloud,
   Heart,
   Footprints,
-  Shield
+  Shield,
+  BookOpen
 } from 'lucide-react';
 
 export { 
@@ -76,5 +77,6 @@ export {
   Cloud,
   Heart,
   Footprints,
-  Shield
+  Shield,
+  BookOpen
 };

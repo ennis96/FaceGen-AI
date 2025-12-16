@@ -19,6 +19,14 @@ const getStyleModifier = (style: WatchStyle): string => {
     case WatchStyle.ISLAMIC: return "islamic geometric patterns, arabesque, calligraphy art, gold and turquoise, mosque architecture style, intricate mandala";
     case WatchStyle.CULTURAL: return "traditional turkish motifs, kilim pattern, ottoman style, ceramic tile texture, cultural heritage, ornate tapestry";
     case WatchStyle.SEASONAL: return "seasonal theme, holiday aesthetic, festive colors, thematic illustration, high quality wallpaper style";
+    case WatchStyle.RELIGIOUS: return "spiritual, divine light, sacred symbols, peaceful atmosphere, golden radiance, heavenly, ethereal";
+    case WatchStyle.ABSTRACT: return "abstract art, geometric shapes, fluid acrylic pour, modern art, colorful, avant-garde, kandinsky style";
+    case WatchStyle.GRAFFITI: return "street art style, graffiti letters, spray paint texture, urban vibe, vibrant neon colors, banksy style, grunge wall";
+    case WatchStyle.RETRO: return "retro 80s aesthetics, synthwave, outrun style, neon grid, sunset, vhs glitch effect, pixelated gradient";
+    case WatchStyle.PIXEL: return "8-bit pixel art, retro gaming style, blocky details, limited color palette, nostalgia, arcade game interface";
+    case WatchStyle.STEAMPUNK: return "steampunk aesthetic, copper gears, brass pipes, victorian industrial, clockwork mechanism, vintage engineering, steam";
+    case WatchStyle.WATERCOLOR: return "watercolor painting, soft brush strokes, artistic, pastel colors, paper texture, dreamy, hand painted style";
+    case WatchStyle.SKETCH: return "architectural blueprint, technical sketch, white lines on blue background, grid paper, engineering diagram, pencil shading";
     default: return "high quality, smart watch face background";
   }
 };
@@ -143,11 +151,14 @@ export const generateWatchFaceImage = async (prompt: string, style: WatchStyle, 
   const styleModifier = getStyleModifier(style);
   
   // Dynamic instruction based on shape
-  const shapeInstruction = device.shape === WatchShape.RECTANGLE
-    ? "rectangular aspect ratio (4:5), rounded corners, full screen apple watch wallpaper"
-    : "perfectly circular aspect ratio (1:1), round smartwatch face";
+  let shapeInstruction = "perfectly circular aspect ratio (1:1), round smartwatch face";
+  if (device.shape === WatchShape.RECTANGLE) {
+      shapeInstruction = "rectangular aspect ratio (4:5), rounded corners, full screen apple watch wallpaper";
+  } else if (device.shape === WatchShape.SQUARE) {
+      shapeInstruction = "square aspect ratio (1:1), rounded corners, smartwatch face";
+  }
 
-  const fullPrompt = `Design a premium smart watch face background. 
+  const fullPrompt = `Design a premium smart watch face background for ${device.name} (${device.brand}). 
   Subject: ${prompt}. 
   Style: ${styleModifier}. 
   Format: ${shapeInstruction}.
